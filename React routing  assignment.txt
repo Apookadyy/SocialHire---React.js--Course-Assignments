@@ -1,0 +1,171 @@
+React Routing Assignment 
+
+1. What is React Router and why is it used in React applications?
+Ans 
+React Router is a routing library for React that enables navigation between different components (pages) without reloading the whole page. It allows for:
+
+*Declarative routing
+
+*Nested routes
+
+*Route protection
+
+*Dynamic routing
+
+*Use Case: Creating Single Page Applications (SPAs) with client-side routing.
+
+2. Explain the difference between BrowserRouter and HashRouter?
+Ans
+ Feature	                  BrowserRouter	                                        HashRouter
+*URL Structure	Uses clean URLs (e.g., /about)	                      Uses hash-based URLs (e.g., #/about)
+*Server Setup	Needs server-side configuration (to handle refreshes)	No server setup required
+*Use Case	Production apps with backend support	              Apps hosted on static servers (like GitHub Pages)
+
+3. How do you perform navigation programmatically in React Router?
+Ans 
+Use the useNavigate() hook
+
+Example -
+import { useNavigate } from 'react-router-dom';
+
+const Component = () => {
+  const navigate = useNavigate();
+  
+  const goToHome = () => {
+    navigate('/home');
+  };
+
+  return <button onClick={goToHome}>Go Home</button>;
+};
+
+4. What is a dynamic route? Give an example.
+Ans 
+A dynamic route contains route parameters, which act like variables in the URL.
+Example - 
+<Route path="/user/:id" element={<UserProfile />} />
+
+5. How can you access route parameters in a component?
+Ans 
+Using the useParams() hook
+Example -
+import { useParams } from 'react-router-dom';
+
+const UserProfile = () => {
+  const { id } = useParams();
+  return <h1>User ID: {id}</h1>;
+};
+
+6. Use of useNavigate and useParams in React?
+Ans 
+*useNavigate: Used to navigate programmatically.
+
+*useParams: Retrieves dynamic route parameters (e.g., :id).
+
+7. How do you implement nested routes in React Router?
+Ans 
+Example -  
+
+<Route path="/dashboard" element={<Dashboard />}>
+  <Route path="profile" element={<Profile />} />
+  <Route path="settings" element={<Settings />} />
+</Route>
+Inside Dashboard, use <Outlet /> to render the nested content.
+
+8. How can you handle 404 (Not Found) pages in React Router?
+Ans 
+Add a catch-all route at the end
+Example -
+<Route path="*" element={<NotFound />} />
+
+9. What is the difference between Link and NavLink components?
+Ans 
+Feature	           <Link>	                <NavLink>
+Purpose  	Basic navigation	Adds active styling for current route
+Styling	    Needs manual styling	Has built-in isActive prop
+
+Example-
+<NavLink to="/about" className={({ isActive }) => isActive ? "active" : ""} />
+
+10. How do you redirect a user to another route?
+Ans 
+Using <Navigate />
+
+return <Navigate to="/login" replace />;
+Or with useNavigate() as shown earlier.
+
+11. How can you protect routes (private routes) in React Router?
+Ans 
+Create a wrapper component:
+Example -
+const PrivateRoute = ({ children }) => {
+  const auth = useAuth(); // custom auth logic
+  return auth.user ? children : <Navigate to="/login" />;
+};
+
+// Usage
+<Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+
+12. What is lazy loading and why is it important in React applications?
+Ans
+Lazy loading means loading components only when needed (on demand). It reduces initial load time.
+
+Example -
+const Home = React.lazy(() => import('./Home'));
+Use with <Suspense />.
+
+13. What is the purpose of the Suspense component in React?
+Ans 
+<Suspense> shows a fallback (e.g., a spinner) while the lazy component loads.
+Example -
+<Suspense fallback={<Loading />}>
+  <Home />
+</Suspense>
+
+14. What is an index route in React Router and how is it defined?
+Ans 
+An index route is the default child route when the parent is matched.
+Example -
+<Route path="dashboard" element={<Dashboard />}>
+  <Route index element={<Overview />} />  // index route
+</Route>
+
+15. What is the Outlet component in React Router and when would you use it?
+Ans 
+<Outlet /> is a placeholder for nested routes inside a parent route’s component.
+
+Example -
+const Dashboard = () => (
+  <div>
+    <h2>Dashboard</h2>
+    <Outlet />
+  </div>
+);
+
+16. What are query parameters (query params) and how can you access them in React Router?
+Ans 
+Query params look like: /search?q=react
+
+Use useLocation() and URLSearchParams:
+
+Example -
+const { search } = useLocation();
+const query = new URLSearchParams(search);
+const q = query.get('q');
+
+17. Difference between <Navigate /> and useNavigate in React Router?
+Ans 
+*Feature	   <Navigate />	                       useNavigate()
+*Usage	   Used in JSX	                    Used inside functions
+*Purpose	 Declarative redirection	Imperative (programmatic) navigation
+
+18. How does useLocation differ from useParams?
+Ans 
+Hook	                     Purpose
+useLocation	Access full URL info, search/query, pathname
+useParams	Get dynamic route parameters (e.g., :id)
+
+19. What is the difference between a protected route and a public route?
+Ans 
+Type	              Access Control
+Protected	Only accessible when authenticated
+Public	            Accessible to everyone
